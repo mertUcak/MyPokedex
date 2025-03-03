@@ -1,5 +1,6 @@
 import sqlite3
 import requests
+import tkinter as tk
 
 class Pokemon:
     def __init__(self, pokemon_id):
@@ -19,11 +20,11 @@ class Pokemon:
             return None
 
 
-# SQLite connection and cursor
+'''# SQLite connection and cursor
 conn = sqlite3.connect("pokedex.db")
-cursor = conn.cursor()
+cursor = conn.cursor()'''
 
-# Schema for creating the table
+'''# Schema for creating the table
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS pokemon (
         id INTEGER PRIMARY KEY,
@@ -32,24 +33,34 @@ cursor.execute("""
 """)
 
 # Inserting Pokémon data
-for i in range(1, 152):  # Pokémon IDs are 1 to 151
+for i in range(1, 152):  
     pokemon = Pokemon(i)
-    pokemon_name = pokemon.fetch_pokemon_data()  # Fetch name for each Pokémon
-    if pokemon_name:  # Only insert if the name was successfully fetched
+    pokemon_name = pokemon.fetch_pokemon_data()  
+    if pokemon_name:  
         cursor.execute("""
             INSERT INTO pokemon (id, name)
             VALUES (:id, :name)
         """, {'id': i, 'name': pokemon_name})
 
-# Verifying the inserted data
-cursor.execute("""
+'''
+'''cursor.execute("""
     SELECT *
     FROM pokemon
 """)
 
-# Printing the inserted Pokémon data
+
 print(cursor.fetchall())
 
-# Committing the changes and closing the connection
+
 conn.commit()
-conn.close()
+conn.close()'''
+
+
+class Application(tk.Frame):              
+    def __init__(self, master=None):
+        tk.Frame.__init__(self, master)   
+        self.grid(column=2, row=5, padx=20, pady=20)                           
+
+app = Application()                       
+app.master.title('Sample application')    
+app.mainloop()      
