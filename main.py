@@ -1,35 +1,29 @@
-import requests
 import sqlite3
-import json
+import requests
 
-########## EXTRACTING POKEMON INFORMATION FROM API ##########
+class Pokemon:
+    def __init__(self, pokemon_id):
+        self.pokemon_id = pokemon_id
+        self.name = None
 
-base_url = "https://pokeapi.co/api/v2"
+    def fetch_pokemon_data(self):
+        base_url = "https://pokeapi.co/api/v2/pokemon/"
+        response = requests.get(f"{base_url}{self.pokemon_id}")
 
-def get_pokemon_info(id):
-    url = f"{base_url}/pokemon/{id}"
-    response = requests.get(url)
-    print(response)
-
-    if response.status_code == 200:
-        pokemon_data = response.json()
-        return pokemon_data
-
-    else:
-        print(f"Failed to retrieve data {response.status_code}")
-
-'''pokemon_info = get_pokemon_info(4)
-
-if pokemon_info:
-    print(f"{pokemon_info["name"]}")'''
+        if response.status_code == 200:
+            data = response.json()
+            self.name = data['name']  # Extract the Pokémon's name
+            return self.name
+        else:
+            print(f"Failed to retrieve data for Pokémon with ID {self.pokemon_id}")
+            return None
 
 
-
-########## INSERTING DATA INTO SQL DATABASE ##########
-
+# SQLite connection and cursor
 conn = sqlite3.connect("pokedex.db")
 cursor = conn.cursor()
 
+# Schema for creating the table
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS pokemon (
         id INTEGER PRIMARY KEY,
@@ -37,6 +31,25 @@ cursor.execute("""
     )
 """)
 
+# Inserting Pokémon data
+for i in range(1, 152):  # Pokémon IDs are 1 to 151
+    pokemon = Pokemon(i)
+    pokemon_name = pokemon.fetch_pokemon_data()  # Fetch name for each Pokémon
+    if pokemon_name:  # Only insert if the name was successfully fetched
+        cursor.execute("""
+            INSERT INTO pokemon (id, name)
+            VALUES (:id, :name)
+        """, {'id': i, 'name': pokemon_name})
 
+# Verifying the inserted data
+cursor.execute("""
+    SELECT *
+    FROM pokemon
+""")
+
+# Printing the inserted Pokémon data
+print(cursor.fetchall())
+
+# Committing the changes and closing the connection
 conn.commit()
 conn.close()
