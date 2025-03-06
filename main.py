@@ -21,11 +21,14 @@ left_frame = customtkinter.CTkFrame(app)
 left_frame.grid(row=0, column=0, sticky="nsew")
 left_frame.grid_propagate(False)
 
+
 right_frame = customtkinter.CTkFrame(app)
 right_frame.grid(row=0, column=1, sticky="nsew")
+right_frame.grid_propagate(False)
+
 
 # Ensure frames expand properly
-app.grid_columnconfigure(0, weight=0)
+app.grid_columnconfigure(0, weight=1)
 app.grid_columnconfigure(1, weight=1)
 app.grid_rowconfigure(0, weight=1)
 
@@ -44,7 +47,7 @@ for pokemon in pokemon_list:
     button = customtkinter.CTkButton(
         scrollable_frame, 
         text=pokemon[0].capitalize(),  # Pokémon name
-        command=lambda p=pokemon[0]: show_pokemon_details(p)
+        command=lambda p=pokemon[0].capitalize(): show_pokemon_details(p)
     )
     button.pack(pady=5, fill="x")  # Adjust spacing & full width
 
