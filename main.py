@@ -15,41 +15,23 @@ app.title("MyPokedex")
 app.geometry("800x600")
 app.resizable(True, True)
 
+app.grid_rowconfigure(0, weight=1, uniform="equal")
+app.grid_columnconfigure(0, weight=1, uniform="equal")
+app.grid_columnconfigure(1, weight=1, uniform="equal")
 
-# Frames for left (Pokémon List) and right (Details)
-left_frame = customtkinter.CTkFrame(app)
-left_frame.grid(row=0, column=0, sticky="nsew")
-left_frame.grid_propagate(False)
+left_scrool_frame = customtkinter.CTkScrollableFrame(master=app)
+left_scrool_frame.grid(row=0, column=0, padx=(20, 10), pady=(20), sticky="nsew")
+left_scrool_frame.grid_columnconfigure(0, weight=1)
 
-
-right_frame = customtkinter.CTkFrame(app)
-right_frame.grid(row=0, column=1, sticky="nsew")
-right_frame.grid_propagate(False)
-
-
-# Ensure frames expand properly
-app.grid_columnconfigure(0, weight=1)
-app.grid_columnconfigure(1, weight=1)
-app.grid_rowconfigure(0, weight=1)
-
-# Scrollable Frame for Pokémon List
-scrollable_frame = customtkinter.CTkScrollableFrame(left_frame)
-scrollable_frame.pack(expand=True, fill="both", padx=10, pady=10)
-
-def show_pokemon_details(pokemon_name):
-    for widget in right_frame.winfo_children():
-        widget.destroy()  # Clear previous content
-
-    label = customtkinter.CTkLabel(right_frame, text=f"Selected: {pokemon_name}", font=("Arial", 20))
-    label.pack(pady=20)
+right_info_frame = customtkinter.CTkFrame(master=app)
+right_info_frame.grid(row=0, column=1, padx=(10, 20), pady=(20), sticky="nsew")
 
 for pokemon in pokemon_list:
-    button = customtkinter.CTkButton(
-        scrollable_frame, 
-        text=pokemon[0].capitalize(),  # Pokémon name
-        command=lambda p=pokemon[0].capitalize(): show_pokemon_details(p)
-    )
-    button.pack(pady=5, fill="x")  # Adjust spacing & full width
+    pokemon_name = pokemon[0].capitalize()
+
+    button = customtkinter.CTkButton(master=left_scrool_frame, text=pokemon_name)
+    button.grid(column=0, padx=(30), pady=(5), sticky="ew")
+
 
 
 app.mainloop()
