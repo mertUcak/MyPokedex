@@ -1,8 +1,7 @@
 import sqlite3
 import requests
 
-
-# SQLite connection and cursor
+#### EXECUTE THE FILE STARTING FROM HERE
 conn = sqlite3.connect("pokedex.db")
 cursor = conn.cursor()
 
@@ -23,7 +22,26 @@ class Pokemon:
         else:
             print(f"Failed to retrieve data for Pokemon with ID {self.pokemon_id}")
             return None
-        
+# Schema for creating the table
+cursor.execute("""
+     CREATE TABLE IF NOT EXISTS pokemon (
+         id INTEGER PRIMARY KEY,
+         name TEXT NOT NULL
+     )
+ """)
+
+
+# Inserting Pokémon data
+for i in range(1, 152):  
+     pokemon = Pokemon(i)
+     pokemon_name = pokemon.fetch_pokemon_data()  
+     if pokemon_name:  
+         cursor.execute("""
+             INSERT INTO pokemon (id, name)
+             VALUES (:id, :name)
+         """, {'id': i, 'name': pokemon_name})
+
+
 # for i in range(152):
 #     pokemon = Pokemon(i)
 #     pokemon_name = pokemon.fetch_pokemon_data()  
@@ -32,25 +50,6 @@ class Pokemon:
 #             UPDATE pokemon
 #             SET name = :name
 #             WHERE id = :id""", {'id':i, 'name':pokemon_name})
-
-
-# # Schema for creating the table
-# cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS pokemon (
-#         id INTEGER PRIMARY KEY,
-#         name TEXT NOT NULL
-#     )
-# """)
-
-# # Inserting Pokémon data
-# for i in range(1, 152):  
-#     pokemon = Pokemon(i)
-#     pokemon_name = pokemon.fetch_pokemon_data()  
-#     if pokemon_name:  
-#         cursor.execute("""
-#             INSERT INTO pokemon (id, name)
-#             VALUES (:id, :name)
-#         """, {'id': i, 'name': pokemon_name})
 
 
 # cursor.execute("""
