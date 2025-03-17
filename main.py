@@ -75,7 +75,7 @@ for pokemon_id, pokemon in enumerate(pokemon_list, start=1):
     button = customtkinter.CTkButton(
         master=left_scrool_frame,
         text=pokemon_name,
-        command=lambda id=pokemon_id: update_pokemon(id)  
+        command=lambda id=pokemon_id: update_pokemon(id) 
     )
     button.grid(column=0, padx=(30), pady=(5), sticky="ew")
 
