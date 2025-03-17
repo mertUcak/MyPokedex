@@ -7,7 +7,7 @@ conn = sqlite3.connect("pokedex.db")
 cursor = conn.cursor()
 
 
-'''class Pokemon:
+class Pokemon:
     def __init__(self, pokemon_id):
         self.pokemon_id = pokemon_id
         self.name = None
@@ -24,46 +24,45 @@ cursor = conn.cursor()
             print(f"Failed to retrieve data for Pokemon with ID {self.pokemon_id}")
             return None
         
-for i in range(152):
-    pokemon = Pokemon(i)
-    pokemon_name = pokemon.fetch_pokemon_data()  
-    if pokemon_name: 
-        cursor.execute("""
-            UPDATE pokemon
-            SET name = :name
-            WHERE id = :id""", {'id':i, 'name':pokemon_name})'''
+# for i in range(152):
+#     pokemon = Pokemon(i)
+#     pokemon_name = pokemon.fetch_pokemon_data()  
+#     if pokemon_name: 
+#         cursor.execute("""
+#             UPDATE pokemon
+#             SET name = :name
+#             WHERE id = :id""", {'id':i, 'name':pokemon_name})
 
 
-'''# Schema for creating the table
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS pokemon (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
-    )
-""")
+# # Schema for creating the table
+# cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS pokemon (
+#         id INTEGER PRIMARY KEY,
+#         name TEXT NOT NULL
+#     )
+# """)
 
-# Inserting Pokémon data
-for i in range(1, 152):  
-    pokemon = Pokemon(i)
-    pokemon_name = pokemon.fetch_pokemon_data()  
-    if pokemon_name:  
-        cursor.execute("""
-            INSERT INTO pokemon (id, name)
-            VALUES (:id, :name)
-        """, {'id': i, 'name': pokemon_name})
-
-'''
-'''cursor.execute("""
-    SELECT *
-    FROM pokemon
-""")
+# # Inserting Pokémon data
+# for i in range(1, 152):  
+#     pokemon = Pokemon(i)
+#     pokemon_name = pokemon.fetch_pokemon_data()  
+#     if pokemon_name:  
+#         cursor.execute("""
+#             INSERT INTO pokemon (id, name)
+#             VALUES (:id, :name)
+#         """, {'id': i, 'name': pokemon_name})
 
 
-print(cursor.fetchall())
+# cursor.execute("""
+#     SELECT *
+#     FROM pokemon
+# """)
 
-'''
 
-'''# Table which includes sprite and info of pokemon
+# print(cursor.fetchall())
+
+
+# Table which includes sprite and info of pokemon
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS pokemon_info (
         pokemon_id,
@@ -71,7 +70,7 @@ cursor.execute("""
         info_text TEXT NOT NULL,
         FOREIGN KEY (pokemon_id) REFERENCES pokemon(id)
     )
-""")'''
+""")
 
 ## FETCHING FLAVOR TEXT FOR POKEMON ##
 
@@ -120,6 +119,10 @@ for i in range(1, 152):
 """, {'id':i, 'art':pokemon_art, 'text':pokemon_flavor}
 )
 
+#Create index for database performance
+cursor.execute("""
+CREATE INDEX idx_pokemon_id ON pokemon_info(pokemon_id)
+""")
 
 conn.commit()
 conn.close()

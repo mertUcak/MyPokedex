@@ -1,2 +1,11 @@
+
+# Ignore virtual environment
+myenv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore SQLite database file (optional, if you don’t want to push it)
 pokedex.db
-_pycache_/
